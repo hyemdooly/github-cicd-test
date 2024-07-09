@@ -2,7 +2,7 @@
 
 name: CI
 
-run-name: create release ${{ github.ref_name }}-${{ github.run_number }}
+run-name: create branch ${{ github.event.inputs.branch_name }}-${{ github.event.inputs.version_code }}-${{ github.run_number }}
 permissions:
     id-token: write
     contents: write
@@ -11,17 +11,16 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      version_code:
-        description: '버전명'
-        required: true
-        default: '4.18.0'
-
-      branch_name:
-        description: "release / hotfix"
-        type: choice
-        options:
-            - release
-            - hotfix
+        branch_name:
+            description: "release / hotfix"
+            type: choice
+            options:
+                - release
+                - hotfix
+        version_code:
+            description: '버전명'
+            required: true
+            default: '0.0.0'
 
 jobs:
     build:
@@ -36,8 +35,8 @@ jobs:
             -   name: Configure Git
                 run: |
                     git fetch --prune --unshallow --tags
-                    git config user.email "hyemdooly@gmail.com"
-                    git config user.name "hyemdooly"
+                    git config user.email github-actions
+                    git config user.name github-actions@github.com
 
             -   name: Create release branch
                 env:
@@ -46,31 +45,12 @@ jobs:
                 run: |
                     git checkout -b ${BRANCH}/${VERSION}
                     git push origin ${BRANCH}/${VERSION}
-                    git push --set-upstream origin ${BRANCH}/${VERSION}
-
-            -   name: Get Head commit hash of develop branch
-                id: get_head_commit_of_develop
-                run: |
-                  echo "head_commit_develop=$(git rev-list --max-parents=0 origin/develop)" >> $GITHUB_ENV
-                  
-            -   name: Get Head commit hash of develop branch
-                id: get_head_commit_of_release
-                run: |
-                  echo "head_commit_release=$(git rev-list --max-parents=0 HEAD)" >> $GITHUB_ENV
-
-            -   name: Make update-version.sh executable
-                run: |
-                    chmod +x ./update-version.sh
 
             -   name: update version
                 id: update-version
                 run: |
-                    if [ ${{ env.head_commit_develop }} == ${{ env.head_commit_release }} ]; then
-                        # update version
-                        ./update-version.sh
-                    else
-                        echo "No version update required"
-                    fi
+                    # update version
+                    ./update-version.sh
 
                 env:
                     ANDROID_HOME: ${{ vars.ANDROID_HOME }}
