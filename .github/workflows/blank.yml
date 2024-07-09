@@ -46,6 +46,7 @@ jobs:
                 run: |
                     git checkout -b ${BRANCH}/${VERSION}
                     git push origin ${BRANCH}/${VERSION}
+                    git push --set-upstream origin ${BRANCH}/${VERSION}
 
             -   name: Get Head commit hash of develop branch
                 id: get_head_commit_of_develop
