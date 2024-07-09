@@ -45,6 +45,7 @@ jobs:
                         ./update-version.sh
                     else
                         echo "No version update required"
+                    fi
 
                 env:
                     ANDROID_HOME: ${{ vars.ANDROID_HOME }}
