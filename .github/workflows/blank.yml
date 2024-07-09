@@ -2,16 +2,26 @@
 
 name: CI
 
-run-name: update version ${{ github.ref_name }}-${{ github.run_number }}
+run-name: create release ${{ github.ref_name }}-${{ github.run_number }}
 permissions:
     id-token: write
     contents: write
     actions: read
     checks: write
 on:
-  push:
-      branches:
-          - release/**
+  workflow_dispatch:
+    inputs:
+      version_code:
+        description: '버전명'
+        required: true
+        default: '4.18.0'
+
+      branch_name:
+        description: "release / hotfix"
+        type: choice
+        options:
+            - release
+            - hotfix
 
 jobs:
     build:
@@ -20,12 +30,22 @@ jobs:
         steps:
             -   name: Checkout origin repository
                 uses: actions/checkout@v3
+                with:
+                    ref: develop
 
             -   name: Configure Git
                 run: |
                     git fetch --prune --unshallow --tags
                     git config user.email "hyemdooly@gmail.com"
                     git config user.name "hyemdooly"
+
+            -   name: Create release branch
+                env:
+                    VERSION: ${{ github.event.inputs.version_code }}
+                    BRANCH: ${{ github.event.inputs.branch_name }}
+                run: |
+                    git checkout -b ${BRANCH}/${VERSION}
+                    git push origin ${BRANCH}/${VERSION}
 
             -   name: Get Head commit hash of develop branch
                 id: get_head_commit_of_develop
