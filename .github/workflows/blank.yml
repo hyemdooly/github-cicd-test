@@ -1,0 +1,50 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+run-name: update version ${{ github.ref_name }}-${{ github.run_number }}
+permissions:
+    id-token: write
+    contents: write
+    actions: read
+    checks: write
+
+on:
+  create:
+    branches:
+      - 'release/*'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout origin repository
+                uses: actions/checkout@v3
+
+            -   name: Configure Git
+                run: |
+                    git fetch --prune --unshallow --tags
+                    git config user.email "hyemdooly@gmail.com"
+                    git config user.name "hyemdooly"
+
+            -   name: update version
+                id: update-version
+                run: |
+                    # update version
+                    # versionCode, versionName 변경
+                    perl -i -pe 's/(appVersionCode=)([0-9]+)$/$1.($2+1)/e' appVersion.properties
+                    export APP_VERSION_NAME=`git branch --show-current | grep -Eo '\b[0-9]+\.[0-9]+\.[0-9]+\b'`
+                    echo "APP_VERSION_NAME=$APP_VERSION_NAME"
+                    
+                    export SED_COMMAND="s/appVersionName=[0-9]+\.[0-9]+\.[0-9]+/appVersionName=$APP_VERSION_NAME/g appVersion.properties"
+                    echo "SED_COMMAND=$SED_COMMAND"
+                    sed -i -E $SED_COMMAND
+                    
+                    # 커밋 & 푸시
+                    git add .
+                    git commit -m "update Version to $APP_VERSION_NAME"
+                    git push origin
+
+                env:
+                    ANDROID_HOME: ${{ vars.ANDROID_HOME }}
