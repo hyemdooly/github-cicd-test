@@ -15,7 +15,7 @@ on:
 
 jobs:
     build:
-        if: github.event.created
+        if: github.event_name == 'create'
         runs-on: ubuntu-latest
 
         steps:
