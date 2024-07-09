@@ -12,7 +12,7 @@ permissions:
 on:
   create:
     branches:
-      - 'release/*'
+      - 'release/**'
 
 jobs:
     build:
