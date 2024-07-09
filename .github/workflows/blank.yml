@@ -9,13 +9,11 @@ permissions:
     actions: read
     checks: write
 on:
-  push:
-    branches:
-      - 'releases/**'
+  create:
 
 jobs:
     build:
-        if: github.event.created
+        if: startsWith(github.ref, 'refs/heads/release/')
         runs-on: ubuntu-latest
 
         steps:
