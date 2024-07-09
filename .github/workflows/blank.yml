@@ -37,6 +37,10 @@ jobs:
                 run: |
                   echo "head_commit_release=$(git rev-list --max-parents=0 HEAD)" >> $GITHUB_ENV
 
+            -   name: Make update-version.sh executable
+                run: |
+                    chmod +x ./update-version.sh
+
             -   name: update version
                 id: update-version
                 run: |
