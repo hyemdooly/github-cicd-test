@@ -15,7 +15,6 @@ on:
 
 jobs:
     build:
-        if: github.event_name == 'create'
         runs-on: ubuntu-latest
 
         steps:
@@ -28,7 +27,18 @@ jobs:
                     git config user.email "hyemdooly@gmail.com"
                     git config user.name "hyemdooly"
 
+            -   name: Get Head commit hash of develop branch
+                id: get_head_commit_of_develop
+                run: |
+                  echo "head_commit_develop=$(git rev-list --max-parents=0 origin/develop)" >> $GITHUB_ENV
+                  
+            -   name: Get Head commit hash of develop branch
+                id: get_head_commit_of_release
+                run: |
+                  echo "head_commit_release=$(git rev-list --max-parents=0 HEAD)" >> $GITHUB_ENV
+
             -   name: update version
+                if: ${{ env.head_commit_develop }} == ${{ env.head_commit_release }}
                 id: update-version
                 run: |
                     # update version
