@@ -29,8 +29,6 @@ jobs:
         steps:
             -   name: Checkout origin repository
                 uses: actions/checkout@v3
-                with:
-                    ref: develop
 
             -   name: Configure Git
                 run: |
@@ -45,6 +43,7 @@ jobs:
                 run: |
                     git checkout -b ${BRANCH}/${VERSION}
                     git push origin ${BRANCH}/${VERSION}
+                    git push --set-upstream origin ${BRANCH}/${VERSION}
 
             -   name: Make update-version.sh executable
                 run: |
