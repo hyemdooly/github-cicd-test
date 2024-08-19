@@ -17,14 +17,14 @@ fi
 
 echo "OLD_APP_VERSION_CODE=$OLD_APP_VERSION_CODE"
 echo "NEW_APP_VERSION_CODE=$NEW_APP_VERSION_CODE"
-echo "NEW_APP_VERSION_NAME=$NEW_APP_VERSION_NAME"
+echo "NEW_APP_VERSION_NAME=$APP_VERSION_NAME"
 
 cat << EOF > appVersion.properties
 appVersionCode=$NEW_APP_VERSION_CODE
-appVersionName=$NEW_APP_VERSION_NAME
+appVersionName=$APP_VERSION_NAME
 EOF
 
 # 커밋 & 푸시
 git add .
-git commit -m "Update Version to $NEW_APP_VERSION_NAME"
+git commit -m "Update Version to $APP_VERSION_NAME | Build Number ${NEW_APP_VERSION_CODE: -1}"
 git push origin
