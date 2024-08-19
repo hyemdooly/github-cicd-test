@@ -8,7 +8,6 @@ export APP_VERSION_NAME=`git branch --show-current | grep -Eo '\b[0-9]+\.[0-9]+\
 IFS='.'
 read -r MAJOR MINOR PATCH <<< "$APP_VERSION_NAME"
 NEW_APP_VERSION_CODE=$((MAJOR * 100000 + MINOR * 1000 + PATCH * 10))
-IFS=' '
 
 # OLD_VERSION_CODE와 NEW_APP_VERSION_CODE 비교
 if [ "$OLD_APP_VERSION_CODE" -eq "$NEW_APP_VERSION_CODE" ]; then
@@ -26,5 +25,5 @@ EOF
 
 # 커밋 & 푸시
 git add .
-git commit -m "Update Version to $APP_VERSION_NAME | Build Number ${NEW_APP_VERSION_CODE: -1}"
+git commit -m "Update Version to $APP_VERSION_NAME (${NEW_APP_VERSION_CODE: -1})"
 git push origin
