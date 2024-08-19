@@ -1,0 +1,39 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Update version
+
+run-name: update version ${{ github.ref_name }}-${{ github.run_number }}
+permissions:
+    id-token: write
+    contents: write
+    actions: read
+    checks: write
+on:
+  workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout origin repository
+                uses: actions/checkout@v3
+
+            -   name: Configure Git
+                run: |
+                    git fetch --prune --unshallow --tags
+                    git config user.email github-actions
+                    git config user.name github-actions@github.com
+
+            -   name: Make update-version.sh executable
+                run: |
+                    chmod +x ./update-version.sh
+
+            -   name: update version
+                id: update-version
+                run: |
+                    # update version
+                    ./update-version.sh
+
+                env:
+                    ANDROID_HOME: ${{ vars.ANDROID_HOME }}
