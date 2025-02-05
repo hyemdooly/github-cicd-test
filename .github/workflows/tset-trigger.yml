@@ -1,0 +1,14 @@
+name: PR Trigger - Do Nothing
+
+on:
+  pull_request:
+    branches:
+      - 'develop'
+      - 'release/*'
+
+jobs:
+  do-nothing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do Nothing
+        run: echo "PR triggered, but this job does nothing."
