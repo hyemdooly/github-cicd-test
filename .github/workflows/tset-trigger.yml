@@ -5,7 +5,7 @@ on:
     branches:
       - 'develop'
       - 'release/*'
-      - 'master'
+      - 'main'
 
 jobs:
   do-nothing:
