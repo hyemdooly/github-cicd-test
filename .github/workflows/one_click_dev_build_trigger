@@ -1,0 +1,44 @@
+name: One Click DEV Release
+run-name: one click dev release ${{ github.event.inputs.branch_name }}-${{ github.event.inputs.version_code }}-${{ github.run_number }}
+permissions:
+    id-token: write
+    contents: write
+    actions: read
+    checks: write
+
+on:
+    workflow_dispatch:
+        inputs:
+            branch_name:
+                description: "release / hotfix"
+                type: choice
+                options:
+                    - release
+                    - hotfix
+            version_code:
+                description: '버전명'
+                required: true
+                default: '0.0.0'
+            qa_cycle:
+                description: 'QA 차수'
+                required: true
+                default: '1'
+            commit_pointer:
+                description: '시작할 커밋 SHA (지정하지 않으면 HEAD 기준)'
+                required: false
+                default: 'HEAD'
+
+jobs:
+    call_create_branch_and_push_tag:
+        uses: ./.github/workflows/create_release_hotfix_branch.yml
+        with:
+            branch_name: ${{ github.event.inputs.branch_name }}
+            version_code: ${{ github.event.inputs.version_code }}
+            qa_cycle: ${{ github.event.inputs.qa_cycle }}
+            commit_pointer: ${{ github.event.inputs.commit_pointer }}
+    build_dev:
+        uses: ./.github/workflows/dev_release_mock.yml
+        with:
+            firebase: true
+            releaseNotes: "${{ github.event.inputs.version_code }} QA ${{ github.event.inputs.qa_cycle }}차"
+            resultFormat: 'aab'
