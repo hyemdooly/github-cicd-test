@@ -30,7 +30,7 @@ on:
 
 jobs:
     call_create_branch_and_push_tag:
-        uses: ./.github/workflows/create_release_hotfix_branch.yml
+        uses: ./.github/workflows/create-branch.yml
         with:
             branch_name: ${{ github.event.inputs.branch_name }}
             version_code: ${{ github.event.inputs.version_code }}
