@@ -37,6 +37,7 @@ jobs:
             qa_cycle: ${{ github.event.inputs.qa_cycle }}
             commit_pointer: ${{ github.event.inputs.commit_pointer }}
     build_dev:
+        needs: call_create_branch_and_push_tag
         uses: ./.github/workflows/dev_release_mock.yml
         with:
             firebase: true
