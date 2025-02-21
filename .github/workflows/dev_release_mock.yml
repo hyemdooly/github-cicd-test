@@ -1,0 +1,51 @@
+name: DEV_RELEASE_TEST
+run-name: DEV -> ${{ github.repository }} ${{ github.ref_name }}-${{ github.run_number }}
+permissions:
+    contents: write
+    actions: read
+    checks: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      firebase:
+        description: "Firebase 업로드할까요?"
+        type: boolean
+        default: false
+      releaseNotes:
+        description: "Firebase 릴리즈 노트"
+        required: false
+        default: ''
+      resultFormat:
+        description: "apk / aab"
+        type: choice
+        options:
+        - aab
+        - apk
+  workflow_call:
+      inputs:
+          firebase:
+              type: boolean
+              default: true
+          releaseNotes:
+              type: string
+              required: false
+              default: ''
+          resultFormat: # apk or aab
+              type: string
+              required: true
+              default: 'aab'
+
+jobs:
+  do-nothing:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Do Nothing
+        env:
+            FIREBASE: ${{ github.event.inputs.firebase }}
+            NOTES: ${{ github.event.inputs.firebase }}
+            FORMAT: ${{ github.event.inputs.resultFormat }}
+        run: echo "${FIREBASE}.${NOTES}.${FORMAT}"
+        
