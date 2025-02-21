@@ -1,0 +1,66 @@
+name: One Click Create Branch(release/hotfix)
+run-name: create branch ${{ github.event.inputs.branch_name }}-${{ github.event.inputs.version_code }}-${{ github.run_number }}
+permissions:
+    id-token: write
+    contents: write
+    actions: read
+    checks: write
+
+on:
+    workflow_dispatch:
+        inputs:
+            branch_name:
+                description: "release / hotfix"
+                type: choice
+                options:
+                    - release
+                    - hotfix
+            version_code:
+                description: '버전명'
+                required: true
+                default: '0.0.0'
+            qa_cycle:
+                description: 'QA 차수'
+                required: true
+                default: '1'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout origin repository
+                uses: actions/checkout@v3
+
+            -   name: Configure Git
+                run: |
+                    git fetch --prune --unshallow --tags
+                    git config user.email "github-actions@coinone.com"
+                    git config user.name "Github actions"
+
+            -   name: Create release/hotfix branch
+                env:
+                    VERSION: ${{ github.event.inputs.version_code }}
+                    BRANCH: ${{ github.event.inputs.branch_name }}
+                run: |
+                    git checkout -b ${BRANCH}/${VERSION}
+                    git push origin ${BRANCH}/${VERSION}
+                    git push --set-upstream origin ${BRANCH}/${VERSION}
+
+            -   name: update version
+                id: update-version
+                run: |
+                    # update version
+                    ./update-version.sh
+                env:
+                    ANDROID_HOME: ${{ vars.ANDROID_HOME }}
+
+            -   name: create and push tag
+                env:
+                    VERSION: ${{ github.event.inputs.version_code }}
+                    QA_CYCLE: ${{ github.event.inputs.qa_cycle }}
+                run: |
+                    TAG="${VERSION}.${QA_CYCLE}"
+                    echo "Creating tag: ${TAG}"
+                    git tag "${TAG}" "$(git rev-parse HEAD)"
+                    git push origin "${TAG}"
