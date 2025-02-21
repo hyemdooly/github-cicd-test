@@ -1,6 +1,7 @@
 name: DEV_RELEASE_TEST
 run-name: DEV -> ${{ github.repository }} ${{ github.ref_name }}-${{ github.run_number }}
 permissions:
+    id-token: write
     contents: write
     actions: read
     checks: write
