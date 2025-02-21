@@ -47,6 +47,10 @@ jobs:
                     git push origin ${BRANCH}/${VERSION}
                     git push --set-upstream origin ${BRANCH}/${VERSION}
 
+            -   name: Make update-version.sh executable
+                run: |
+                    chmod +x ./update-version.sh
+
             -   name: update version
                 id: update-version
                 run: |
