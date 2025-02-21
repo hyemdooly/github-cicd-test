@@ -62,8 +62,9 @@ jobs:
                 env:
                     VERSION: ${{ github.event.inputs.version_code }}
                     BRANCH: ${{ github.event.inputs.branch_name }}
+                    COMMIT: ${{ github.event.inputs.commit_pointer }}
                 run: |
-                    git checkout -b ${BRANCH}/${VERSION}
+                    git checkout -b ${BRANCH}/${VERSION} ${COMMIT}
                     git push origin ${BRANCH}/${VERSION}
                     git push --set-upstream origin ${BRANCH}/${VERSION}
 
