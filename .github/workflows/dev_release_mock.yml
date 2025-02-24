@@ -21,8 +21,8 @@ on:
         description: "apk / aab"
         type: choice
         options:
-        - aab
-        - apk
+            - aab
+            - apk
   workflow_call:
       inputs:
           firebase:
