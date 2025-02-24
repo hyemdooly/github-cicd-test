@@ -52,6 +52,7 @@ jobs:
         needs: add_tag
         uses: ./.github/workflows/dev_release_mock.yml
         with:
+            branch: "${{ github.event.inputs.branch_name }}/${{ github.event.inputs.version_code }}"
             firebase: true
             releaseNotes: "${{ github.event.inputs.version_code }} QA ${{ github.event.inputs.qa_cycle }}차"
             resultFormat: 'aab'
