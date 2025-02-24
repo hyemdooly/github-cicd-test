@@ -50,10 +50,10 @@ jobs:
     steps:
       - name: Do Nothing
         env:
-            ZEPHYR: ${{ github.event.inputs.zephyr || inputs.zephyr }}
-            FIREBASE: ${{ github.event.inputs.firebase || inputs.firebase }}
-            NOTES: ${{ github.event.inputs.releaseNotes || inputs.releaseNotes }}
-            FORMAT: ${{ github.event.inputs.resultFormat || inputs.resultFormat }}
+            ZEPHYR: ${{ github.event.inputs.zephyr }}
+            FIREBASE: ${{ github.event.inputs.firebase }}
+            NOTES: ${{ github.event.inputs.releaseNotes }}
+            FORMAT: ${{ github.event.inputs.resultFormat }}
         run: |
             echo "Zephyr run ${ZEPHYR} ${FIREBASE}.${NOTES}.${FORMAT}"
         
