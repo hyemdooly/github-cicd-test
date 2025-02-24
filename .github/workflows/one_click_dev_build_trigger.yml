@@ -60,7 +60,7 @@ jobs:
         needs: add_tag
         uses: ./.github/workflows/qa_release_mock.yml
         with: 
-            zephyr: ${{ github.event.inputs.zephyr }}
+            zephyr: "${{ github.event.inputs.zephyr }}"
             firebase: true
             releaseNotes: "${{ github.event.inputs.version_code }} QA ${{ github.event.inputs.qa_cycle }}차"
             resultFormat: 'aab'
