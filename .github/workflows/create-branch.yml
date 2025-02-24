@@ -76,7 +76,10 @@ jobs:
             -   name: update version
                 id: update-version
                 run: |
+                    echo "=== $REPO $NAME"
                     # update version
                     ./update-version.sh
                 env:
                     ANDROID_HOME: ${{ vars.ANDROID_HOME }}
+                    REPO: ${{ github.repository }}
+                    NAME: ${{ github.ref_name }}
