@@ -45,6 +45,6 @@ jobs:
           # 슬래시(/)를 기준으로 분리하여 두 번째 필드가 버전 번호입니다.
           VERSION=$(echo "$BRANCH" | cut -d'/' -f2)
           TAG="${VERSION}.${QA_CYCLE}"
-          echo "Creating tag: ${TAG}"
+          echo "Branch/Creating tag: ${VERSION}/${TAG}"
           git tag "${TAG}" "$(git rev-parse HEAD)"
           git push origin "${TAG}"
