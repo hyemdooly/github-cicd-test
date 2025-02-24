@@ -41,7 +41,7 @@ jobs:
           QA_CYCLE: ${{ github.event.inputs.qa_cycle }}
         run: |
           # GITHUB_REF 예: refs/heads/release/1.2.3 또는 refs/heads/hotfix/1.2.3
-          BRANCH=${GITHUB_REF#refs/heads/}
+          BRANCH=${{inputs.branch || github.ref}}
           # 슬래시(/)를 기준으로 분리하여 두 번째 필드가 버전 번호입니다.
           VERSION=$(echo "$BRANCH" | cut -d'/' -f2)
           TAG="${VERSION}.${QA_CYCLE}"
