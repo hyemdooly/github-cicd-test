@@ -27,17 +27,29 @@ on:
                 description: '시작할 커밋 SHA (지정하지 않으면 HEAD 기준)'
                 required: false
                 default: 'HEAD'
+            zephyr:
+                description: "Zephyr 스크립트 실행"
+                type: boolean
+                default: true
 
 jobs:
-    call_create_branch_and_push_tag:
+    call_create_branch:
         uses: ./.github/workflows/create-branch.yml
         with:
             branch_name: ${{ github.event.inputs.branch_name }}
             version_code: ${{ github.event.inputs.version_code }}
             qa_cycle: ${{ github.event.inputs.qa_cycle }}
             commit_pointer: ${{ github.event.inputs.commit_pointer }}
+
+    add_tag:
+        needs: call_create_branch
+        uses: ./.github/workflows/add_tag.yml
+        with:
+          qa_cycle: ${{ github.event.inputs.qa_cycle }}
+          branch: ${{ github.event.inputs.branch_name }}/${{ github.event.inputs.version_code }}
+    
     build_dev:
-        needs: call_create_branch_and_push_tag
+        needs: add_tag
         uses: ./.github/workflows/dev_release_mock.yml
         with:
             firebase: true
