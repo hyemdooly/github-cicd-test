@@ -45,9 +45,9 @@ jobs:
     steps:
       - name: Do Nothing
         env:
-            FIREBASE: ${{ github.event.inputs.firebase || inputs.firebase }}
-            NOTES: ${{ github.event.inputs.releaseNotes || inputs.releaseNotes }}
-            FORMAT: ${{ github.event.inputs.resultFormat || inputs.resultFormat }}
+            FIREBASE: ${{ github.event.inputs.firebase }}
+            NOTES: ${{ github.event.inputs.releaseNotes }}
+            FORMAT: ${{ github.event.inputs.resultFormat }}
         run: |
             echo "${FIREBASE}.${NOTES}.${FORMAT}"
         
