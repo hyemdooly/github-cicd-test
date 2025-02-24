@@ -1,5 +1,5 @@
 name: DEV_RELEASE_TEST
-run-name: DEV -> ${{ github.repository }} ${{ github.ref_name }}-${{ github.run_number }}
+run-name: DEV -> ${{ github.repository }} ${{ inputs.branch || github.ref }}-${{ github.run_number }}
 permissions:
     id-token: write
     contents: write
@@ -36,6 +36,9 @@ on:
               type: string
               required: true
               default: 'aab'
+          branch:
+              type: string
+              required: false
 
 jobs:
   do-nothing:
@@ -43,6 +46,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout origin repository
+        uses: actions/checkout@v4
+        with:
+            ref: ${{ inputs.branch || github.ref }}
+        
       - name: Do Nothing
         env:
             FIREBASE: ${{ github.event.inputs.firebase || inputs.firebase }}
@@ -50,4 +58,5 @@ jobs:
             FORMAT: ${{ github.event.inputs.resultFormat || inputs.resultFormat }}
         run: |
             echo "${FIREBASE}.${NOTES}.${FORMAT}"
+            echo $(git rev-parse --abbrev-ref HEAD)
         
