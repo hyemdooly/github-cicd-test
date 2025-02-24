@@ -8,6 +8,7 @@ on:
         required: true
         default: '1'
   workflow_call:
+    inputs:
       qa_cycle:
         description: 'QA n차 (예: 1, 2, 3, …)'
         required: true
