@@ -16,6 +16,10 @@ on:
         description: 'QA n차 (예: 1, 2, 3, …)'
         required: true
         type: string
+      branch:
+        description: '태그 생성할 브랜치 (예: release/0.0.0)'
+        required: true
+        type: string
 
 jobs:
   create_tag:
@@ -24,6 +28,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
+          ref: ${{ inputs.branch || github.ref }}
           persist-credentials: true
 
       - name: Configure Git
