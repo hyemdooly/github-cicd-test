@@ -79,13 +79,3 @@ jobs:
                     ./update-version.sh
                 env:
                     ANDROID_HOME: ${{ vars.ANDROID_HOME }}
-
-            -   name: create and push tag
-                env:
-                    VERSION: ${{ github.event.inputs.version_code }}
-                    QA_CYCLE: ${{ github.event.inputs.qa_cycle }}
-                run: |
-                    TAG="${VERSION}.${QA_CYCLE}"
-                    echo "Creating tag: ${TAG}"
-                    git tag "${TAG}" "$(git rev-parse HEAD)"
-                    git push origin "${TAG}"
