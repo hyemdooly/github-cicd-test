@@ -46,12 +46,21 @@ jobs:
         uses: ./.github/workflows/add_tag.yml
         with:
           qa_cycle: ${{ github.event.inputs.qa_cycle }}
-          branch: ${{ github.event.inputs.branch_name }}/${{ github.event.inputs.version_code }}
+          branch: "${{ github.event.inputs.branch_name }}/${{ github.event.inputs.version_code }}"
     
     build_dev:
         needs: add_tag
         uses: ./.github/workflows/dev_release_mock.yml
         with:
+            firebase: true
+            releaseNotes: "${{ github.event.inputs.version_code }} QA ${{ github.event.inputs.qa_cycle }}차"
+            resultFormat: 'aab'
+
+    build_qa:
+        needs: add_tag
+        uses: ./.github/workflows/qa_release_mock.yml
+        with: 
+            zephyr: ${{ github.event.inputs.zephyr }}
             firebase: true
             releaseNotes: "${{ github.event.inputs.version_code }} QA ${{ github.event.inputs.qa_cycle }}차"
             resultFormat: 'aab'
