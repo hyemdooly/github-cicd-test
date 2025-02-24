@@ -1,0 +1,59 @@
+name: QA_RELEASE_TEST
+run-name: QA -> ${{ github.repository }} ${{ github.ref_name }}-${{ github.run_number }}
+permissions:
+    id-token: write
+    contents: write
+    actions: read
+    checks: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      zephyr:
+        description: "Zephyr 스크립트 실행"
+        type: boolean
+        default: true
+      firebase:
+          description: "Firebase 업로드?"
+          type: boolean
+          default: true
+      releaseNotes:
+          description: "릴리스 노트"
+          required: false
+          default: ''
+      resultFormat:
+         description: "aab / apk"
+         type: choice
+         options:
+            - aab
+            - apk
+  workflow_call:
+      inputs:
+          zephyr:
+              type: boolean
+              default: true
+          firebase:
+              type: boolean
+              default: true
+          releaseNotes:
+              type: string
+              required: false
+              default: ''
+          resultFormat: # apk or aab
+              type: string
+              required: true
+              default: 'aab'
+
+jobs:
+  do-nothing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do Nothing
+        env:
+            ZEPHYR: ${{ github.event.inputs.zephyr || inputs.zephyr }}
+            FIREBASE: ${{ github.event.inputs.firebase || inputs.firebase }}
+            NOTES: ${{ github.event.inputs.releaseNotes || inputs.releaseNotes }}
+            FORMAT: ${{ github.event.inputs.resultFormat || inputs.resultFormat }}
+        run: |
+            echo "Zephyr run ${ZEPHYR} ${FIREBASE}.${NOTES}.${FORMAT}"
+        
