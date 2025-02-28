@@ -34,7 +34,6 @@ on:
 
 jobs:
     call_create_branch:
-        runs-on: ubuntu-latest
         steps:
             - name: Check qa_cycle and possibly skip branch creation
               if: ${{ github.event.inputs.qa_cycle == '1' }}
