@@ -44,7 +44,7 @@ jobs:
 
     add_tag:
         needs: call_create_branch
-        if: ${{ always() && (needs.call_create_branch.result == 'success' || needs.call_create_branch.result == 'skipped') }}
+        if: ${{ (needs.call_create_branch.result == 'success' || needs.call_create_branch.result == 'skipped') }}
         uses: ./.github/workflows/add_tag.yml
         with:
           qa_cycle: ${{ github.event.inputs.qa_cycle }}
@@ -52,7 +52,7 @@ jobs:
     
     build_dev:
         needs: add_tag
-        if: ${{ always() &&
+        if: ${{ 
             (needs.call_create_branch.result == 'success' || needs.call_create_branch.result == 'skipped') &&
             (needs.add_tag.result == 'success' || needs.add_tag.result == 'skipped')
             }}
