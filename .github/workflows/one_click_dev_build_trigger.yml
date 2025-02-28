@@ -34,13 +34,19 @@ on:
 
 jobs:
     call_create_branch:
-        if: ${{ github.event.inputs.qa_cycle == '1' }}
-        uses: ./.github/workflows/create-branch.yml
-        with:
-            branch_name: ${{ github.event.inputs.branch_name }}
-            version_code: ${{ github.event.inputs.version_code }}
-            qa_cycle: ${{ github.event.inputs.qa_cycle }}
-            commit_pointer: ${{ github.event.inputs.commit_pointer }}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check qa_cycle and possibly skip branch creation
+              if: ${{ github.event.inputs.qa_cycle == '1' }}
+              run: echo "qa_cycle is not 1. Skipping branch creation."
+            - name : Create branch if qa_cycle is 1
+              if: ${{ github.event.inputs.qa_cycle == '1' }}
+              uses: ./.github/workflows/create-branch.yml
+              with: 
+                  branch_name: ${{ github.event.inputs.branch_name }}
+                  version_code: ${{ github.event.inputs.version_code }}
+                  qa_cycle: ${{ github.event.inputs.qa_cycle }}
+                  commit_pointer: ${{ github.event.inputs.commit_pointer }}
 
     add_tag:
         needs: call_create_branch
